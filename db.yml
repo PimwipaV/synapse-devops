@@ -1,10 +1,6 @@
 - name: setup Mysql with mysql db and remote login
   become: yes
   hosts: servers
-  vars:
-    db_user: db_user
-    db_pass: db_pass
-    db_name: db_name
     
   tasks:
     - name: Update APT package cache
@@ -37,23 +33,7 @@
       service:
         name: mysql
         state: started
-        enabled: yes   
-
-    - name: Copy .vaultpass file
-      copy: src=.vaultpass dest=/root/.vaultpass owner=root mode=0600
-
-    - name: creating mysql user
-      mysql_user:
-        name: "{{db_user}}"
-        password: "{{db_pass}}"
-        priv: '*.*:ALL'
-        host: '%'
-        state: present
-
-    - name: creating mysql_db
-      mysql_db:
-        name: "{{db_name}}"
-        state: present    
+        enabled: yes     
         
     - name: Enable remote login to mysql
       lineinfile:
