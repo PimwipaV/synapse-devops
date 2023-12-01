@@ -1,0 +1,71 @@
+- name: setup Mysql with mysql db and remote login
+  become: yes
+  hosts: servers
+  vars:
+    db_user: db_user
+    db_pass: db_pass
+    db_name: db_name
+    
+  tasks:
+    - name: Update APT package cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+        force_apt_get: yes
+        default_release: stable
+
+    - name: Installing Mysql  and dependencies
+      package:
+       name: "{{item}}"
+       state: present
+
+      loop:
+       - default-mysql-server
+       - default-mysql-client 
+       - python3-mysqldb
+       - default-libmysqlclient-dev
+      become: yes    
+
+    - name: Update APT package cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+        force_apt_get: yes
+        default_release: stable
+
+    - name: start and enable mysql service
+      service:
+        name: mysql
+        state: started
+        enabled: yes   
+
+    - name: Copy .vaultpass file
+      copy: src=.vaultpass dest=/root/.vaultpass owner=root mode=0600
+
+    - name: creating mysql user
+      mysql_user:
+        name: "{{db_user}}"
+        password: "{{db_pass}}"
+        priv: '*.*:ALL'
+        host: '%'
+        state: present
+
+    - name: creating mysql_db
+      mysql_db:
+        name: "{{db_name}}"
+        state: present    
+        
+    - name: Enable remote login to mysql
+      lineinfile:
+         path: /etc/mysql/conf.d/mysql.cnf
+         regexp: '^bind-address'
+         line: 'bind-address = 127.0.0.1'
+         backup: yes
+      notify:
+         - Restart mysql  
+         
+  handlers:
+    - name: Restart mysql
+      service:
+        name: mysql
+        state: restarted

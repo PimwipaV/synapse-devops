@@ -1,0 +1,3 @@
+db_user: WordPress
+db_pass: @DbPswd
+db_name: mysql_db

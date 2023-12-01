@@ -1,0 +1,22 @@
+---
+- name: Install and Start Nginx
+  hosts: servers
+  become: yes
+  tasks:
+    - name: install Nginx
+      apt: 
+        name: nginx 
+        state: present
+        
+    - name: Update APT package cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+        force_apt_get: yes
+        default_release: stable
+        
+  handlers:
+    - name: start Nginx
+      service: 
+        name: nginx 
+        state: started

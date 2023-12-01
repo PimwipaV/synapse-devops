@@ -1,0 +1,52 @@
+---
+- name: Create mysql for WordPress
+  hosts: servers
+  become: yes
+  become_user: root
+  vars:
+    mysql_root_password: "@DbPswd"
+    mysql_db_name: Wordpress_db
+    mysql_db_user: WordPress
+    mysql_db_password: "@WordPswd"
+    #wordpress_domain: your_domain
+    #wordpress_admin_user: your_admin_user
+    #wordpress_admin_password: your_admin_password
+    #wordpress_admin_email: your_admin_email
+
+  tasks: 
+
+    - name: Install required packages
+      apt:
+        name:
+         # - nginx
+          #- mysql-server
+          - php-fpm
+          - php-mysql
+          - php-cli
+          - php-curl
+          - php-gd
+          - php-mbstring
+          - unzip
+
+    - name: Start and enable services
+      systemd:
+        name: "{{item}}"
+        enabled: yes
+        state: started
+      with_items:
+        - nginx
+        - mysql
+
+    - name: creating mysql user
+      mysql_user:
+        name: "{{mysql_db_user}}"
+        password: "{{mysql_db_password}}"
+        priv: '*.*:ALL'
+        host: '%'
+        state: present
+
+    - name: creating mysql_db
+      mysql_db:
+        name: "{{mysql_db_name}}"
+        state: present    
+        

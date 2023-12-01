@@ -1,0 +1,57 @@
+---
+- name: Install wordpress
+  hosts: servers
+  become: yes
+  become_user: root
+  vars: 
+    wordpress_domain: pimwipa6.wordpress.com
+
+  tasks:
+
+    - name: Download and extract WordPress
+      get_url:
+        url: "https://wordpress.org/latest.tar.gz"
+        dest: /tmp/wordpress.tar.gz
+
+    - name: Extract WordPress archive
+      unarchive:
+        src: /tmp/wordpress.tar.gz
+        dest: /var/www/html/
+        remote_src: yes
+        owner: www-data
+        group: www-data
+
+    - name: Configure WordPress
+      file:
+    #    src: wp-config.php.j2
+        path: /var/www/html/wordpress/wp-config.php
+        owner: www-data
+        group: www-data
+      notify: Reload NGINX
+
+    - name: Set up NGINX virtual host for WordPress
+      file:
+        #src: nginx-wordpress.j2
+        path: /etc/nginx/sites-available/{{wordpress_domain}}
+        owner: root
+        group: root
+      notify: Reload NGINX
+
+    - name: Enable NGINX virtual host
+      file:
+        src: /etc/nginx/sites-available/{{wordpress_domain}}
+        dest: /etc/nginx/sites-enabled/{{wordpress_domain}}
+        state: link
+      notify: Reload NGINX
+
+
+    - name: Stop Apache2
+      service:
+        name: apache2
+        state: stopped
+
+  handlers:
+    - name: Reload NGINX
+      systemd:
+        name: nginx
+        state: reloaded
