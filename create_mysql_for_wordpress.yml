@@ -3,14 +3,8 @@
   hosts: servers
   become: yes
   become_user: root
-  vars:
-    mysql_root_password: "@DbPswd"
-    mysql_db_name: Wordpress_db
-    mysql_db_user: WordPress
-    mysql_db_password: "@WordPswd"
   
   tasks: 
-
     - name: Install required packages
       apt:
         name:
@@ -32,6 +26,9 @@
       with_items:
         - nginx
         - mysql
+
+    - name: Include MySQL credentials
+      include_vars: mysql_credentials.yml
 
     - name: creating mysql user
       mysql_user:
