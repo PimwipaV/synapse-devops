@@ -140,9 +140,10 @@ Now I completed WordPress installation and configuration process using Ansible, 
 
 I have documented all the steps and configuration here.
 
-Nonetheless, I have not yet completed the security hardening but it is still work in progress. Therefore, you can see some mysql credentials leak here to show you the development process of the assignment.
 
 # 6. Bonus Challenge: Security Hardening (Optional)
+
+I have put mysql_credentials.yml in ansible-vault and use it in the playbook create_mysql_for_wordpress.yml
 
 What I could do more for security hardening
 1. my debian VM
@@ -151,8 +152,5 @@ What I could do more for security hardening
 2. nginx
 -implement TLS/SSL
 
-3. MySQL
--use ansible-vault for mysql credentials
-
-4. Wordpress
+3. Wordpress
 -protect wp-config.php by restricting access to it
