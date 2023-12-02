@@ -147,5 +147,12 @@ Nonetheless, I have not yet completed the security hardening but it is still wor
 What I could do more for security hardening
 1. my debian VM
 -disable direct login to ensure only ssh into the machine from Ansible controller is possible
-2. MySQL
+
+2. nginx
+-implement TLS/SSL
+
+3. MySQL
 -use ansible-vault for mysql credentials
+
+4. Wordpress
+-protect wp-config.php by restricting access to it
