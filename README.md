@@ -90,7 +90,7 @@ bind-address = 127.0.0.1
 
 This will install mysql on the debian VM, enable remote login, and restart mysql service.
 
-5. run another playbook ansible-playbook -K -vvvv create_mysql_for_wordpress.yml
+4. run another playbook ansible-playbook -K -vvvv create_mysql_for_wordpress.yml
 
 This will install php dependencies for wordpress, login to mysql as root, and create new user, password, and a database for wordpress.
 Now I can login to my debian VM and do sudo mysql -u WordPress -p, then enter the password I created for user WordPress, and I got to mariadb’s prompt.
@@ -114,7 +114,9 @@ This will download the wordpress tar.gz where in the package comes with wp-confi
 sudo nano /etc/nginx/sites-available/pimwipa6.wordpress.com
 This is the same as task 2 item 7. Include the below in the file
 
+
 server {
+
     listen 80;
     server_name pimwipa6.wordpress.com www.pimwipa6.wordpress.com;
 
@@ -143,7 +145,9 @@ I have documented all the steps and configuration here.
 
 # 6. Bonus Challenge: Security Hardening (Optional)
 
-I have put mysql_credentials.yml in ansible-vault and use it in the playbook create_mysql_for_wordpress.yml
+For mysql, I have put mysql_credentials.yml in ansible-vault and use it in the playbook create_mysql_for_wordpress.yml
+
+And for WordPress, I have restricted the access to wp-config.php to require sudo in order to access and edit the file.
 
 What I could do more for security hardening
 1. my debian VM
@@ -151,6 +155,3 @@ What I could do more for security hardening
 
 2. nginx
 -implement TLS/SSL
-
-3. Wordpress
--protect wp-config.php by restricting access to it
