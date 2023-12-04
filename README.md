@@ -12,11 +12,11 @@
 4. install debian OS onto your newly created VM from the downloaded debian.iso. Ensure that the new VM can be accessed into from host machine with ssh. 
    Or follow instructions from here https://dev.to/developertharun/easy-way-to-ssh-into-virtualbox-machine-any-os-just-x-steps-5d9i
 
-5. turn off the newly created VM and change the network settings by adding an adapter and a port forwarding rule
+5. turn off the newly created VM and change the network settings by adding an adapter and a port forwarding rule. in settings, go to network menu on the left, attach NAT network adapter, and set port forwarding host port 3022, guest port 22
     
 6. in GRUB, start virtualbox machine in recovery mode to login as root and adduser pimwipa sudo so that pimwipa can do sudo, then exit root machine
     
-7. then, turn on virtualbox again in normal mode (debian) as pimwipa@debian: install ssh server on the VM --> sudo apt update and sudo apt install openssh-server. in settings, go to network menu on the left, attach NAT network adapter, and set port forwarding host port 3022, guest port 22
+7. then, turn on virtualbox again in normal mode (debian) as pimwipa@debian: install ssh server on the VM --> sudo apt update and sudo apt install openssh-server. 
     
 8. now, back to the host machine ssh-copy-id pimwipa@localhost
 or copy .ssh/key.pub (all of the key.pubs) and put in VM .ssh/authorized_keys and ssh -p 3022 pimwipa@127.0.0.1
