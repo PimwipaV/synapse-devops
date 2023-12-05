@@ -26,9 +26,16 @@ Now I go on to install Ansible on my local machine. My local machine will act as
 
 For Ansible to know where to get to my debian VM, I have to tell Ansible in etc/ansible/host the server name, host, and the ssh port that it has to go to
 
-in etc/ansible/host
+in etc/ansible/hosts
+
+[servers]
 
 debian.synapse.com ansible_ssh_port=3022 ansible_host=localhost ansible_user=pimwipa
+
+[all:vars]
+
+ansible_python_interpreter=/usr/bin/python3
+
 
 in .ssh/config
 
